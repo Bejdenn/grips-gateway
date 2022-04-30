@@ -1,8 +1,7 @@
 # grips-gateway
 
 grips-gateway is a web handler that acts as a gateway for incoming GRIPS course searches. This service is useful when
-combined with applications like Alfred or others, that support setting web query templates. The gateway is designed to
-be used in a serverless function.
+combined with applications like Alfred or others, that support setting web query templates.
 
 ## How is it working?
 
