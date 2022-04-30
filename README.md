@@ -9,7 +9,7 @@ be used in a serverless function.
 The service processes incoming HTTP requests that contain a so-called 'hint'. A hint is a keyword that is associated
 with a course on GRIPS. This makes it easy to open a course without typing in a full name.
 
-For example, a course 'Biophysics' could have hints like 'bio', 'physics', or an abbreviation like 'BT'.
+For example, a course 'Biophysics' could have hints like 'bio', 'physics', or an abbreviation like 'BP'.
 
 ## Browsers and HTTP status code 301
 
