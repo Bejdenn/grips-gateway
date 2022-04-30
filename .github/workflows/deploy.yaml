@@ -21,4 +21,4 @@ jobs:
         uses: google-github-actions/setup-gcloud@v0
 
       - name: Deploy Cloud Function
-        run: gcloud functions deploy course-redirect --entry-point "Handle" --runtime go116 --trigger-http
+        run: gcloud functions deploy course-redirect --region europe-west3 --entry-point "Handle" --runtime go116 --trigger-http
