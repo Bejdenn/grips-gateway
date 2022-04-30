@@ -37,22 +37,19 @@ func (h *Handler) Handle(db *Database, rw http.ResponseWriter, r *http.Request) 
 		h := r.FormValue("hint")
 		log.Printf("Registered GRIPS gateway request with course hint: %s\n", h)
 
-		iter := db.Instance.Collection(db.TargetCollection).Where("hints", "array-contains", h).Documents(context.TODO())
-		for {
-			doc, err := iter.Next()
+		iter := db.Instance.Collection(db.TargetCollection).Where("hints", "array-contains", h).Limit(1).Documents(context.TODO())
+		defer iter.Stop()
+		doc, err := iter.Next()
 
-			if err == iterator.Done {
-				log.Printf("No course exists with the a hint '%s'. "+
-					"Either there is a typo or the course has to be extended by this particular hint.\n", h)
+		if err == iterator.Done {
+			log.Printf("No course exists with the a hint '%s'. "+
+				"Either there is a typo or the course has to be extended by this particular hint.\n", h)
 
-				http.Redirect(rw, r, gripsBaseURL, http.StatusMovedPermanently)
-				return
-			}
-
-			if err != nil {
-				log.Print(err)
-			}
-
+			http.Redirect(rw, r, gripsBaseURL, http.StatusMovedPermanently)
+			return
+		} else if err != nil {
+			log.Print(err)
+		} else {
 			var c Course
 			err = doc.DataTo(&c)
 			if err != nil {
@@ -63,14 +60,11 @@ func (h *Handler) Handle(db *Database, rw http.ResponseWriter, r *http.Request) 
 			dest := gripsBaseURL + "course/view.php?id=" + c.Id
 			log.Printf("Found course '%s' with ID %s. Redirecting now to %s\n", c.Name, c.Id, dest)
 			http.Redirect(rw, r, dest, http.StatusMovedPermanently)
-			return
 		}
 
 	default:
 		http.Error(rw, http.StatusText(http.StatusMethodNotAllowed), http.StatusMethodNotAllowed)
-		return
 	}
-
 }
 
 func Handle(rw http.ResponseWriter, r *http.Request) {
